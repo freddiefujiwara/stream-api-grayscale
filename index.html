@@ -10,22 +10,27 @@
 <body orient="portrait">
   <device type="media"/>
   <video autoplay id="video" style="width:100%;padding:0;margin:0;left:0;top:0;z-index:-1;"></video>
+  <!-- gray scale preview -->
   <canvas id="gcanvas" style="position:absolute;padding:0;margin:0;left:0;top:0;display:none;z-index:1;" ></canvas>
+  <!-- normalpreview -->
   <canvas id="canvas"  style="position:absolute;padding:0;margin:0;left:0;bottom:0;display:none;z-index:1;"></canvas>
   <script src="http://code.jquery.com/jquery-1.6.2.min.js" type="text/javascript"></script>
   <script type="text/javascript">
   //<![CDATA[
   $(document).ready(function(){
+    //Can I use camera device?
     if(navigator.getUserMedia) {
       navigator.getUserMedia('video', 
+        //run video
         function( stream ) {
           var video = document.getElementById('video');
           video.src = stream;
 
+          //tap and shoot
           $("#video").
           click(function(){
+            //portrait only
             if($(window).width() > $(window).height())return;
-            //$("#canvas").css("display","block");
             $("#gcanvas").css("display","block");
             try {
               var video = document.getElementById('video');
@@ -43,6 +48,7 @@
               gcvs.height = video.videoHeight;
 
               ctx.drawImage(video, 0, 0);
+              //to gray scale
               var plx = ctx.getImageData(0, 0, cvs.width, cvs.height);
               for(var y = 0; y < plx.height; y++){
                 for(var x = 0; x < plx.width; x++){
@@ -61,6 +67,7 @@
             }
           });
 
+          //save normal
           $("#canvas").
           click(function(){
             try {
@@ -71,6 +78,7 @@
             }
           });
 
+          //save gray scale
           $("#gcanvas").
           click(function(){
             try {
